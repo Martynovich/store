@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -52,11 +53,11 @@ public class Store {
 		Client client = new Client();
 		client.setLogin("Igor");
 		Order order = new Order();
-		ArrayList<Product> orderArr = new ArrayList<Product>();
+		List<Product> orderArr = new ArrayList<Product>();
 		orderArr.add(patato);
 		orderArr.add(tomato);
 		orderArr.add(apple);
-		order.setClient(client);
+		order.setClientId(client);
 		order.setProducts(orderArr);
 		order.setDateOfCreation(new Date());
 		System.out.println("*** Persist - start ***");;
@@ -70,11 +71,11 @@ public class Store {
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         Session session =  sessionFactory.openSession();
         session.beginTransaction();
-        //session.save(client);
-        //session.save(patato);
-        //session.save(tomato);
-        //session.save(apple);
-        //session.save(paneapple);
+        session.save(client);
+        session.save(patato);
+        session.save(tomato);
+        session.save(apple);
+        session.save(paneapple);
         session.save(orderArr);
         session.getTransaction().commit();
         session.close();

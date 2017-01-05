@@ -8,25 +8,22 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.andersen.domain.Client;
 import com.andersen.domain.Product;
 
 public class ProductDao implements DAO<Product> {
-	
+
 	private Session currentSession;
 	
 	private Transaction currentTransaction;
 	
 	private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+		Configuration configuration = new Configuration().configure();
+		configuration.addAnnotatedClass(Client.class);
+		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
-    }
-	
-	public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
     }
 	
 	public Session openCurrentSessionwithTransaction() {
@@ -35,42 +32,43 @@ public class ProductDao implements DAO<Product> {
         return currentSession;
     }
 	
-	public void closeCurrentSession() {
-        currentSession.close();
-    }
-	
 	public void closeCurrentSessionwithTransaction() {
-			currentTransaction.commit();
-			currentSession.close();
-	}
-
-	public Session getCurrentSession() {
-        	return currentSession;
+        currentTransaction.commit();
+        currentSession.close();
     }
 
 	public void persist(Product entity) {
-		getCurrentSession().save(entity);
+		openCurrentSessionwithTransaction().save(entity);
+		closeCurrentSessionwithTransaction();
 		
+	}
+	
+	public Product findById(int id) {
+		Product product = (Product)openCurrentSessionwithTransaction().get(Product.class, id);
+		closeCurrentSessionwithTransaction();
+        return product;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Product> findAll() {
+		List<Product> product = (List<Product>)openCurrentSessionwithTransaction().createQuery("Delete from product");
+		closeCurrentSessionwithTransaction();
+        return product;
 	}
 
 	public void update(Product entity) {
-		getCurrentSession().update(entity);
-		
-	}
-
-	public Product findById(int id) {
-		Product product = (Product)getCurrentSession().get(Product.class, id);
-        return product;
+		openCurrentSessionwithTransaction().update(entity);
+		closeCurrentSessionwithTransaction();
 	}
 
 	public void delete(Product entity) {
-		getCurrentSession().delete(entity);
+		openCurrentSessionwithTransaction().delete(entity);
+		closeCurrentSessionwithTransaction();
 	}
-
-	@SuppressWarnings("unchecked")
-	public List<Product> findAll() {
-		List<Product> product = (List<Product>)getCurrentSession().createQuery("from Product").list();
-        return product;
+	
+	public void deleteById(int id) {
+		openCurrentSessionwithTransaction().delete(this.findById(id));
+		closeCurrentSessionwithTransaction();
 	}
 
 	public void deleteAll() {

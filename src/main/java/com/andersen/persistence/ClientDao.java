@@ -18,16 +18,12 @@ public class ClientDao implements DAO<Client> {
 	private Transaction currentTransaction;
 	
 	private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+		Configuration configuration = new Configuration().configure();
+		configuration.addAnnotatedClass(Client.class);
+		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
-    }
-	
-	public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
     }
 	
 	public Session openCurrentSessionwithTransaction() {
@@ -36,39 +32,45 @@ public class ClientDao implements DAO<Client> {
         return currentSession;
     }
 	
-	public void closeCurrentSession() {
-        currentSession.close();
-    }
-public void closeCurrentSessionwithTransaction() {
+	public void closeCurrentSessionwithTransaction() {
         currentTransaction.commit();
         currentSession.close();
     }
 
-public Session getCurrentSession() {
-        return currentSession;
-    }
-
 	public void persist(Client entity) {
-		getCurrentSession().save(entity);
+		openCurrentSessionwithTransaction().save(entity);
+		closeCurrentSessionwithTransaction();
+		
 	}
-
-	public void update(Client entity) {
-		getCurrentSession().update(entity);
-	}
-
+	
 	public Client findById(int id) {
-		Client client = (Client)getCurrentSession().get(Client.class, id);
+		Client client = (Client)openCurrentSessionwithTransaction().get(Client.class, id);
+		closeCurrentSessionwithTransaction();
+        return client;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Client> findAll() {
+		List<Client> client = (List<Client>)openCurrentSessionwithTransaction().createQuery("Delete from client");
+		closeCurrentSessionwithTransaction();
         return client;
 	}
 
-	public void delete(Client entity) {
-		getCurrentSession().delete(entity);
+	public void update(Client entity) {
+		openCurrentSessionwithTransaction().update(entity);
+		closeCurrentSessionwithTransaction();
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Client> findAll() {
-		List<Client> books = (List<Client>)getCurrentSession().createQuery("from Client").list();
-        return books;
+	
+
+	public void delete(Client entity) {
+		openCurrentSessionwithTransaction().delete(entity);
+		closeCurrentSessionwithTransaction();
+	}
+	
+	public void deleteById(int id) {
+		openCurrentSessionwithTransaction().delete(this.findById(id));
+		closeCurrentSessionwithTransaction();
 	}
 
 	public void deleteAll() {
@@ -77,11 +79,24 @@ public Session getCurrentSession() {
             delete(entity);
         }
 	}
-	
-	
-	
-	
+
 	/*
+	 * 
+	
+	public Session openCurrentSession() {
+        currentSession = getSessionFactory().openSession();
+        return currentSession;
+    }   
+	
+	public void closeCurrentSession() {
+        currentSession.close();
+    }
+    
+
+	public Session getCurrentSession() {
+	
+        return currentSession;
+    }
 	
 	public void closeCurrentSession() {
 		        currentSession.close();

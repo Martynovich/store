@@ -7,26 +7,23 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.andersen.domain.Client;
 import com.andersen.domain.Order;
 
 
 public class OrderDao implements DAO<Order> {
-	
+
 	private Session currentSession;
 	
 	private Transaction currentTransaction;
 	
 	private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+		Configuration configuration = new Configuration().configure();
+		configuration.addAnnotatedClass(Client.class);
+		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
-    }
-	
-	public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
     }
 	
 	public Session openCurrentSessionwithTransaction() {
@@ -35,40 +32,45 @@ public class OrderDao implements DAO<Order> {
         return currentSession;
     }
 	
-	public void closeCurrentSession() {
-        currentSession.close();
-    }
-	
 	public void closeCurrentSessionwithTransaction() {
-			currentTransaction.commit();
-			currentSession.close();
-	}
-
-	public Session getCurrentSession() {
-        	return currentSession;
+        currentTransaction.commit();
+        currentSession.close();
     }
 
 	public void persist(Order entity) {
-		getCurrentSession().save(entity);
+		openCurrentSessionwithTransaction().save(entity);
+		closeCurrentSessionwithTransaction();
+		
+	}
+	
+	public Order findById(int id) {
+		Order order = (Order)openCurrentSessionwithTransaction().get(Order.class, id);
+		closeCurrentSessionwithTransaction();
+        return order;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Order> findAll() {
+		List<Order> order = (List<Order>)openCurrentSessionwithTransaction().createQuery("Delete from order");
+		closeCurrentSessionwithTransaction();
+        return order;
 	}
 
 	public void update(Order entity) {
-		getCurrentSession().update(entity);	
+		openCurrentSessionwithTransaction().update(entity);
+		closeCurrentSessionwithTransaction();
 	}
 
-	public Order findById(int id) {
-		Order order = (Order)getCurrentSession().get(Order.class, id);
-        return order;
-	}
+	
 
 	public void delete(Order entity) {
-		getCurrentSession().delete(entity);	
+		openCurrentSessionwithTransaction().delete(entity);
+		closeCurrentSessionwithTransaction();
 	}
-
-	@SuppressWarnings("unchecked")
-	public List<Order> findAll() {
-		List<Order> order = (List<Order>)getCurrentSession().createQuery("from Order").list();
-        return order;
+	
+	public void deleteById(int id) {
+		openCurrentSessionwithTransaction().delete(this.findById(id));
+		closeCurrentSessionwithTransaction();
 	}
 
 	public void deleteAll() {
@@ -78,7 +80,4 @@ public class OrderDao implements DAO<Order> {
         }
 	}
 	
-
-
-
 }
