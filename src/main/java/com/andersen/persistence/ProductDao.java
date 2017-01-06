@@ -19,7 +19,7 @@ public class ProductDao implements DAO<Product> {
 	
 	private static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure();
-		configuration.addAnnotatedClass(Client.class);
+		configuration.addAnnotatedClass(Product.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());

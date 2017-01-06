@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -14,13 +15,13 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import com.andersen.domain.Client;
-import com.andersen.domain.Order;
+import com.andersen.domain.Cart;
 import com.andersen.domain.Product;
 import com.andersen.persistence.ClientDao;
 
 public class Store {	
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws IOException{
 		/*BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String enterStore = new String();
 		System.out.println("Welcome to our store!");
@@ -38,7 +39,8 @@ public class Store {
 		}
 		}
 		System.out.println(enterStore);*/
-		Product patato = new Product();
+		
+		/*Product patato = new Product();
 		patato.setProductName("patato");
 		patato.setProdutPrice(2);
 		Product tomato = new Product();
@@ -51,13 +53,13 @@ public class Store {
 		paneapple.setProductName("paneapple");
 		paneapple.setProdutPrice(5);
 		Client client = new Client();
-		client.setLogin("Igor");
-		Order order = new Order();
+		client.setLogin("Sergey");
+		Cart order = new Cart();
 		List<Product> orderArr = new ArrayList<Product>();
-		orderArr.add(patato);
 		orderArr.add(tomato);
-		orderArr.add(apple);
-		order.setClientId(client);
+		orderArr.add(tomato);
+		orderArr.add(paneapple);
+		order.setClient(client);
 		order.setProducts(orderArr);
 		order.setDateOfCreation(new Date());
 		System.out.println("*** Persist - start ***");;
@@ -65,7 +67,7 @@ public class Store {
 		Configuration configuration = new Configuration().configure();
 		configuration.addAnnotatedClass(Client.class);
 		configuration.addAnnotatedClass(Product.class);
-		configuration.addAnnotatedClass(Order.class);
+		configuration.addAnnotatedClass(Cart.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
@@ -76,12 +78,19 @@ public class Store {
         session.save(tomato);
         session.save(apple);
         session.save(paneapple);
-        session.save(orderArr);
+        session.save(order);
         session.getTransaction().commit();
-        session.close();
-
+        session.close();*/
 		
-		
+		ClientService clientServise = new ClientService();
+		ProductService productService = new ProductService();
+		CartService cartServise = new CartService();
+		//ClientDao cD = new ClientDao();
+		/*List<Client> list = clientServise.findAll();
+		for(Client client : list){
+			System.out.println(client.getId() + client.getLogin());
+		}*/
+		clientServise.create();
 	}
 
 }

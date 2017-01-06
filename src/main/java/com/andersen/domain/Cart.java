@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 //import javax.persistence.JoinColumn;
@@ -13,27 +14,27 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Id;
 //import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Order implements Serializable {
-	
-	/**
-	 * 
-	 */
+public class Cart implements Serializable {
+
 	private static final long serialVersionUID = 3L;
 
 	@Id
 	@Column
-	@GeneratedValue(generator="order_increment")
-	@GenericGenerator(name="order_increment", strategy = "increment")
-	private int orderId;
+	@GeneratedValue(generator="cart_increment")
+	@GenericGenerator(name="cart_increment", strategy = "increment")
+	//@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
 
-	@Column
-	private int clientId;
+	//@Column
+	@ManyToOne(cascade = CascadeType.ALL)
+	private Client client;
 	
 	//@ManyToMany(targetEntity=com.andersen.domain.Product.class, cascade = CascadeType.ALL)
 	//@JoinTable(joinColumns = @JoinColumn(name = "ORDER_ID"), inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID"))
@@ -44,20 +45,20 @@ public class Order implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfCreation;
 	
-	public int getOrderId() {
-		return orderId;
+	public int geId() {
+		return id;
 	}
 	
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public int getClientId() {
-		return clientId;
+	public Client getClient() {
+		return client;
 	}
 
-	public void setClientId(Client client) {
-		this.clientId = client.getId();
+	public void setClient(Client client) {
+		this.client = client;
 	}
 	
 	public List<Product> getProducts() {

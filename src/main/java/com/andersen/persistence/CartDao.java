@@ -8,10 +8,10 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import com.andersen.domain.Client;
-import com.andersen.domain.Order;
+import com.andersen.domain.Cart;
 
 
-public class OrderDao implements DAO<Order> {
+public class CartDao implements DAO<Cart> {
 
 	private Session currentSession;
 	
@@ -19,7 +19,7 @@ public class OrderDao implements DAO<Order> {
 	
 	private static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure();
-		configuration.addAnnotatedClass(Client.class);
+		configuration.addAnnotatedClass(Cart.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
@@ -37,33 +37,33 @@ public class OrderDao implements DAO<Order> {
         currentSession.close();
     }
 
-	public void persist(Order entity) {
+	public void persist(Cart entity) {
 		openCurrentSessionwithTransaction().save(entity);
 		closeCurrentSessionwithTransaction();
 		
 	}
 	
-	public Order findById(int id) {
-		Order order = (Order)openCurrentSessionwithTransaction().get(Order.class, id);
+	public Cart findById(int id) {
+		Cart cart = (Cart)openCurrentSessionwithTransaction().get(Cart.class, id);
 		closeCurrentSessionwithTransaction();
-        return order;
+        return cart;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Order> findAll() {
-		List<Order> order = (List<Order>)openCurrentSessionwithTransaction().createQuery("Delete from order");
+	public List<Cart> findAll() {
+		List<Cart> cart = (List<Cart>)openCurrentSessionwithTransaction().createQuery("Delete from order");
 		closeCurrentSessionwithTransaction();
-        return order;
+        return cart;
 	}
 
-	public void update(Order entity) {
+	public void update(Cart entity) {
 		openCurrentSessionwithTransaction().update(entity);
 		closeCurrentSessionwithTransaction();
 	}
 
 	
 
-	public void delete(Order entity) {
+	public void delete(Cart entity) {
 		openCurrentSessionwithTransaction().delete(entity);
 		closeCurrentSessionwithTransaction();
 	}
@@ -74,8 +74,8 @@ public class OrderDao implements DAO<Order> {
 	}
 
 	public void deleteAll() {
-		List<Order> entityList = findAll();
-        for (Order entity : entityList) {
+		List<Cart> entityList = findAll();
+        for (Cart entity : entityList) {
             delete(entity);
         }
 	}

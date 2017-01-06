@@ -37,7 +37,7 @@ public class ClientDao implements DAO<Client> {
         currentSession.close();
     }
 
-	public void persist(Client entity) {
+	public void persist(Client entity) {//////////////////////////////////////
 		openCurrentSessionwithTransaction().save(entity);
 		closeCurrentSessionwithTransaction();
 		
@@ -50,8 +50,8 @@ public class ClientDao implements DAO<Client> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Client> findAll() {
-		List<Client> client = (List<Client>)openCurrentSessionwithTransaction().createQuery("Delete from client");
+	public List<Client> findAll() {//////////////////////////////////
+		List<Client> client = (List<Client>)openCurrentSessionwithTransaction().createCriteria(Client.class).list();
 		closeCurrentSessionwithTransaction();
         return client;
 	}
@@ -79,60 +79,5 @@ public class ClientDao implements DAO<Client> {
             delete(entity);
         }
 	}
-
-	/*
-	 * 
 	
-	public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
-    }   
-	
-	public void closeCurrentSession() {
-        currentSession.close();
-    }
-    
-
-	public Session getCurrentSession() {
-	
-        return currentSession;
-    }
-	
-	public void closeCurrentSession() {
-		        currentSession.close();
-		    }
-	public void closeCurrentSessionwithTransaction() {
-		        currentTransaction.commit();
-		        currentSession.close();
-		    }
-	
-	public Session getCurrentSession() {
-		        return currentSession;
-		    }
-	public void setCurrentSession(Session currentSession) {
-		        this.currentSession = currentSession;
-		    }
-		    public Transaction getCurrentTransaction() {
-		        return currentTransaction;
-		    }
-		    public void setCurrentTransaction(Transaction currentTransaction) {
-		        this.currentTransaction = currentTransaction;
-		    }
-		    public void delete(Book entity) {
-		        getCurrentSession().delete(entity);
-		    }
-		    @SuppressWarnings("unchecked")
-		    public List<Book> findAll() {
-		        List<Book> books = (List<Book>) getCurrentSession().createQuery("from Book").list();
-		        return books;
-		    }
-		    public void deleteAll() {
-		        List<Book> entityList = findAll();
-		        for (Book entity : entityList) {
-		            delete(entity);
-		        }
-		    }
-		}*/
-
-
 }

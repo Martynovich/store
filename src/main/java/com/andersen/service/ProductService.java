@@ -13,8 +13,8 @@ public class ProductService implements CrudServise<Product> {
 		productDao = new ProductDao();
 	}
 
-	public void create(Product entity) {
-		productDao.persist(entity);
+	public void create() {
+		//productDao.persist(entity);
 	}
 
 	public Product findById(int i) {
@@ -27,8 +27,8 @@ public class ProductService implements CrudServise<Product> {
         return product;
 	}
 
-	public void update(Product entity) {
-		productDao.update(entity);
+	public void update(int id) {
+		//productDao.update(entity);
 		
 	}
 
