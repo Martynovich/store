@@ -7,7 +7,9 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.andersen.domain.Cart;
 import com.andersen.domain.Client;
+import com.andersen.domain.Product;
 
 import org.hibernate.SessionFactory;
 
@@ -20,6 +22,8 @@ public class ClientDao implements DAO<Client> {
 	private static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure();
 		configuration.addAnnotatedClass(Client.class);
+		configuration.addAnnotatedClass(Product.class);
+		configuration.addAnnotatedClass(Cart.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());

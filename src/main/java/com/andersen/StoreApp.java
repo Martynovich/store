@@ -13,7 +13,7 @@ import com.andersen.service.ProductService;
 
 public class StoreApp {
 	
-	private static CrudServise<?> tableServise;
+	private static CrudServise tableServise;
 	private static String userInput;
 	private static String tableName;
 	private static String currentSelecting = "table";
@@ -27,20 +27,24 @@ public class StoreApp {
 		startApp();
 	}
 	
-	public static void startApp() throws IOException{
+	public static void startApp(){
 		System.out.print("Hello."); 
 		tableSelecting();
 		currentSelecting = "action";
 		commandSelecting();
 	}
 	
-	private static void tableSelecting() throws IOException{
+	private static void tableSelecting(){
 		System.out.println("Please select the table.");
 		System.out.println("Enter the table number for select.");
 		System.out.println("1 - Client");
 		System.out.println("2 - Product.");
 		System.out.println("3 - Cart.");
-		rawNumber = inputHandler(new String[]{"1", "2", "3"});
+		try {
+			rawNumber = inputHandler(new String[]{"1", "2", "3"});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		switch(rawNumber){
 			case 1: tableServise = new ClientService();
 					tableName = "client";
@@ -54,7 +58,7 @@ public class StoreApp {
 		}
 	}
 	
-	private static void commandSelecting() throws IOException{
+	private static void commandSelecting(){
 		System.out.println("Please select an action.");
 		System.out.println("Enter the action number for select.");
 		System.out.printf("1 - Create new %s.\n", tableName);
@@ -63,13 +67,19 @@ public class StoreApp {
 		System.out.printf("4 - Update %s.\n", tableName);
 		System.out.printf("5 - Delete %s by id.\n", tableName);
 		System.out.printf("6 - Delete all %ss.\n", tableName);
-		rawNumber = inputHandler(new String[]{"1", "2", "3", "4", "5", "6"});
+		try {
+			rawNumber = inputHandler(new String[]{"1", "2", "3", "4", "5", "6"});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		switch(rawNumber){
-		case 1: tableServise = new ClientService();
-				tableName = "client";
+		case 1: try {
+				tableServise.create();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 				break;
-		case 2: tableServise = new ProductService();
-				tableName = "product";
+		case 2: tableServise.findById();
 				break;
 		case 3: tableServise = new CartService();
 				tableName = "cart";

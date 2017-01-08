@@ -1,12 +1,16 @@
 package com.andersen.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -19,11 +23,13 @@ public class Client  implements Serializable {
 	@Column
 	@GeneratedValue(generator="client_increment")
 	@GenericGenerator(name="client_increment", strategy = "increment")
-	//
 	private int id;
 	
 	@Column(unique = true, nullable = false)
 	private String login;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="client", cascade = CascadeType.ALL)
+	private List<Cart> carts;
 	
 	public Client(){
 	}
@@ -47,5 +53,14 @@ public class Client  implements Serializable {
 	public void setLogin(String name) {
 		this.login = name;
 	}
+
+	public List<Cart> getCarts() {
+		return carts;
+	}
+
+	public void setCarts(List<Cart> carts) {
+		this.carts = carts;
+	}
+	
 	
 }

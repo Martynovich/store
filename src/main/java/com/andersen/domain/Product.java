@@ -20,7 +20,6 @@ public class Product implements Serializable {
 	@Column
 	@GeneratedValue(generator="product_increment")
 	@GenericGenerator(name="product_increment", strategy = "increment")
-	//@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
 	@Column(unique = true, nullable = false)
@@ -28,6 +27,13 @@ public class Product implements Serializable {
 	
 	@Column(nullable = false)
 	private int produtPrice;
+	
+	public Product(){}
+	
+	public Product(String name, int prise){
+		this.productName = name;
+		this.produtPrice = prise;
+	}
 	
 	public int getId() {
 		return id;

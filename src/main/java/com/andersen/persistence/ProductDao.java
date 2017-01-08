@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.andersen.domain.Cart;
 import com.andersen.domain.Client;
 import com.andersen.domain.Product;
 
@@ -19,7 +20,9 @@ public class ProductDao implements DAO<Product> {
 	
 	private static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure();
+		configuration.addAnnotatedClass(Client.class);
 		configuration.addAnnotatedClass(Product.class);
+		configuration.addAnnotatedClass(Cart.class);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties());
         SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
@@ -51,7 +54,7 @@ public class ProductDao implements DAO<Product> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Product> findAll() {
-		List<Product> product = (List<Product>)openCurrentSessionwithTransaction().createQuery("Delete from product");
+		List<Product> product = (List<Product>)openCurrentSessionwithTransaction().createCriteria(Product.class).list();
 		closeCurrentSessionwithTransaction();
         return product;
 	}

@@ -17,7 +17,9 @@ import org.hibernate.service.ServiceRegistry;
 import com.andersen.domain.Client;
 import com.andersen.domain.Cart;
 import com.andersen.domain.Product;
+import com.andersen.persistence.CartDao;
 import com.andersen.persistence.ClientDao;
+import com.andersen.persistence.ProductDao;
 
 public class Store {	
 	
@@ -85,12 +87,10 @@ public class Store {
 		ClientService clientServise = new ClientService();
 		ProductService productService = new ProductService();
 		CartService cartServise = new CartService();
-		//ClientDao cD = new ClientDao();
-		/*List<Client> list = clientServise.findAll();
-		for(Client client : list){
-			System.out.println(client.getId() + client.getLogin());
-		}*/
-		clientServise.create();
+		ClientDao cD = new ClientDao();
+		CartDao cdd = new CartDao();
+		ProductDao pD = new ProductDao();
+		cartServise.findById();
 	}
 
 }
