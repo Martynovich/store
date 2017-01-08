@@ -9,13 +9,17 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,7 +31,7 @@ public class Cart implements Serializable {
 	private static final long serialVersionUID = 3L;
 
 	@Id
-	@Column
+	@Column//(name = "cart_id")
 	@GeneratedValue(generator="cart_increment")
 	@GenericGenerator(name="cart_increment", strategy = "increment")
 	private int id;
@@ -37,8 +41,8 @@ public class Cart implements Serializable {
 	@ManyToOne
     @JoinColumn(name="client_id")
 	private Client client;
-	
-	@ManyToMany(cascade = CascadeType.PERSIST)
+
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private List<Product> products = null;
 	
 	@Column

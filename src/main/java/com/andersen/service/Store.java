@@ -90,7 +90,7 @@ public class Store {
 		ClientDao cD = new ClientDao();
 		CartDao cdd = new CartDao();
 		ProductDao pD = new ProductDao();
-		cartServise.findById();
+		cartServise.findAll();
 	}
 
 }

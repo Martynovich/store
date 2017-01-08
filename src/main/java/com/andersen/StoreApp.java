@@ -73,25 +73,17 @@ public class StoreApp {
 			e.printStackTrace();
 		}
 		switch(rawNumber){
-		case 1: try {
-				tableServise.create();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		case 1: tableServise.create();
 				break;
 		case 2: tableServise.findById();
 				break;
-		case 3: tableServise = new CartService();
-				tableName = "cart";
+		case 3: tableServise.findAll();
 				break;
-		case 4: tableServise = new CartService();
-				tableName = "cart";
+		case 4: tableServise.update();
 				break;
-		case 5: tableServise = new CartService();
-				tableName = "cart";
+		case 5: tableServise.deleteById();
 				break;
-		case 6: tableServise = new CartService();
-				tableName = "cart";
+		case 6: tableServise.deleteAll();
 				break;
 		}
 	}

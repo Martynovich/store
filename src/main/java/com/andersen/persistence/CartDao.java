@@ -1,11 +1,14 @@
 package com.andersen.persistence;
 
 import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 
 import com.andersen.domain.Client;
 import com.andersen.domain.Product;
@@ -54,7 +57,7 @@ public class CartDao implements DAO<Cart> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Cart> findAll() {
-		List<Cart> cart = (List<Cart>)openCurrentSessionwithTransaction().createQuery("Delete from order");
+		List<Cart> cart = (List<Cart>)openCurrentSessionwithTransaction().createCriteria(Cart.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		closeCurrentSessionwithTransaction();
         return cart;
 	}

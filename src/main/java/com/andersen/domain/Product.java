@@ -28,7 +28,9 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private int produtPrice;
 	
-	public Product(){}
+	public Product(){
+		
+	}
 	
 	public Product(String name, int prise){
 		this.productName = name;

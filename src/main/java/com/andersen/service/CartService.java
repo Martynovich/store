@@ -67,22 +67,91 @@ public class CartService implements CrudServise {
 	}
 
 	public void findAll() {
-		List<Cart> cart = (List<Cart>)cartDao.findAll();
+		List<Cart> carts = cartDao.findAll();
+		if(carts == null){
+			System.out.println("No carts.");
+		}
+		for(Cart cart : carts){
+			System.out.println("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
+					" order date - " + cart.getDateOfCreation());
+			List<Product> products = cart.getProducts();
+			System.out.println("Products in cart.");
+			if(products.isEmpty()){
+				System.out.println("Cart is empty.");
+			}
+			for(Product product : products){
+				System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
+						", product price - " + product.getProdutPrice());
+			}
+			System.out.println("\n");
+		}
+		StoreUtil.contOrExit();
 	}
 
 	public void update() {
-		//cartDao.update(entity);
+		Cart cart = cartIdInput();
+		Client newClient;
+		try{
+			while(true){
+				System.out.println("Change client? yes/no.");
+				System.out.println("For exit enter - exit");
+				
+				userInput = reader.readLine();
+				StoreUtil.isExit(userInput);
+				if(!userInput.equals("yes") && !userInput.equals("no")){
+					System.out.println("Enter correct command: yes/no.");
+					System.out.println("For exit enter - exit");
+					continue;
+				}
+				if(userInput.equals("yes")){
+					newClient = clientService.clientIdInput();
+					cart.setClient(newClient);
+					break;
+				}
+				if(userInput.equals("no")){
+					break;
+				}
+			}
+			while(true){
+				System.out.println("Change products? yes/no.");
+				System.out.println("For exit enter - exit");
+				userInput = reader.readLine();
+				StoreUtil.isExit(userInput);
+				if(!userInput.equals("yes") && !userInput.equals("no")){
+					System.out.println("Enter correct command: yes/no.");
+					System.out.println("For exit enter - exit");
+					continue;
+				}
+				if(userInput.equals("yes")){
+					cart = productsEditor(cart);
+					continue;
+				}
+				if(userInput.equals("no")){
+					break;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		cartDao.update(cart);
 	}
 
 	public void deleteById() {
-		//cartDao.deleteById(id);
+		Cart cart = cartIdInput();
+		cartDao.delete(cart);
+		System.out.println("Client deleted.");
+		StoreUtil.contOrExit();
 	}
 
 	public void deleteAll() {
-		List<Cart> entityList = cartDao.findAll();
-        for (Cart entity : entityList) {
-        	cartDao.delete(entity);
-        }
+		try {
+			List<Cart> cartList = cartDao.findAll();
+        	for (Cart cart : cartList) {
+        		cartDao.delete(cart);
+        	}
+		}catch(Exception e){
+			System.out.println("");
+		}
 	}
 	
 	private Cart cartIdInput(){
@@ -108,5 +177,77 @@ public class CartService implements CrudServise {
 			break;
 		}
 		return cart;
+	}
+	private Cart productsEditor(Cart cart){
+		List<Product> products = cart.getProducts();
+		try{
+			while(true){
+				System.out.println("Add product? yes/no.");
+				userInput = reader.readLine();
+				StoreUtil.isExit(userInput);
+				if(!userInput.equals("yes") && !userInput.equals("no")){
+					System.out.println("Enter correct command: yes/no.");
+					System.out.println("For exit enter - exit");
+					continue;
+				}
+				if(userInput.equals("yes")){
+					products.add(productService.productIdInput());
+					System.out.println("Product added.");
+					continue;
+				}
+				if(userInput.equals("no")){
+					break;
+				}
+			}
+			while(true){
+				System.out.println("Remove product? yes/no.");
+				userInput = reader.readLine();
+				StoreUtil.isExit(userInput);
+				if(!userInput.equals("yes") && !userInput.equals("no")){
+					System.out.println("Enter correct command: yes/no.");
+					System.out.println("For exit enter - exit");
+					continue;
+				}
+				if(userInput.equals("yes")){
+					products = removeProduct(products);
+					System.out.println("Products removed.");
+					continue;
+				}
+				if(userInput.equals("no")){
+					break;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		cart.setProducts(products);
+		return cart;
+	}
+	
+	private List<Product> removeProduct(List<Product> products){
+		try{
+			for(int i = 0 ; i < products.size() ; i++){
+				System.out.println("Are you want to delete?");
+				System.out.println("Product id - " + products.get(i).getId() + ", product login - " + products.get(i).getProductName() + 
+						", product price - " + products.get(i).getProdutPrice());
+				System.out.println("yes/no");
+				System.out.println("For exit enter - exit");
+				userInput = reader.readLine();
+				StoreUtil.isExit(userInput);
+				if(userInput.equals("yes")){
+					products.remove(i);
+				}
+				if(userInput.equals("no")){
+					continue;
+				}
+				if(!userInput.equals("yes") && userInput.equals("no")){
+					System.out.println("Enter correct command: yes/no.");
+					System.out.println("For exit enter - exit");
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return products;
 	}
 }

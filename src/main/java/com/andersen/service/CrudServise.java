@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface CrudServise {
 	
-	public void create() throws IOException;
+	public void create();
 	
 	public void findById();
 	
