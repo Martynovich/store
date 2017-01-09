@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import com.andersen.StoreApp;
 import com.andersen.domain.Client;
 import com.andersen.persistence.ClientDao;
 
@@ -20,7 +19,7 @@ public class ClientService implements CrudServise {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 
-	public void create() {////////////////////////////////////////////////////////////////////////
+	public void create() {
 		System.out.println("Enter clientname.");
 		System.out.println("For exit enter - exit.");
 		try {
@@ -36,13 +35,13 @@ public class ClientService implements CrudServise {
 		StoreUtil.contOrExit();
 	}
 
-	public void findById() {///////////////////////////////////////////////////////////////
+	public void findById() {
 		Client client = clientIdInput();
 		System.out.println("Client id - " + client.getId() + " client login - " + client.getLogin());
 		StoreUtil.contOrExit();
 	}
 
-	public void findAll() {/////////////////////////////////////////////////////////////////////////////////
+	public void findAll() {
 		List<Client> clients = clientDao.findAll();
 		if(clients == null){
 			System.out.println("No clients.");

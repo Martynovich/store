@@ -8,7 +8,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Projections;
 
 import com.andersen.domain.Client;
 import com.andersen.domain.Product;
@@ -46,7 +45,6 @@ public class CartDao implements DAO<Cart> {
 	public void persist(Cart entity) {
 		openCurrentSessionwithTransaction().save(entity);
 		closeCurrentSessionwithTransaction();
-		
 	}
 	
 	public Cart findById(int id) {
@@ -57,7 +55,8 @@ public class CartDao implements DAO<Cart> {
 	
 	@SuppressWarnings("unchecked")
 	public List<Cart> findAll() {
-		List<Cart> cart = (List<Cart>)openCurrentSessionwithTransaction().createCriteria(Cart.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		List<Cart> cart = (List<Cart>)openCurrentSessionwithTransaction().
+				createCriteria(Cart.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 		closeCurrentSessionwithTransaction();
         return cart;
 	}
@@ -66,8 +65,6 @@ public class CartDao implements DAO<Cart> {
 		openCurrentSessionwithTransaction().update(entity);
 		closeCurrentSessionwithTransaction();
 	}
-
-	
 
 	public void delete(Cart entity) {
 		openCurrentSessionwithTransaction().delete(entity);
@@ -85,5 +82,4 @@ public class CartDao implements DAO<Cart> {
             delete(entity);
         }
 	}
-	
 }

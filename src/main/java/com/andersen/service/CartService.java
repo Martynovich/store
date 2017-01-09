@@ -134,12 +134,13 @@ public class CartService implements CrudServise {
 			e.printStackTrace();
 		}
 		cartDao.update(cart);
+		System.out.println("Cart updated.");
 	}
 
 	public void deleteById() {
 		Cart cart = cartIdInput();
 		cartDao.delete(cart);
-		System.out.println("Client deleted.");
+		System.out.println("Cart deleted.");
 		StoreUtil.contOrExit();
 	}
 
@@ -152,6 +153,8 @@ public class CartService implements CrudServise {
 		}catch(Exception e){
 			System.out.println("");
 		}
+		System.out.println("All carts are deleted.");
+		StoreUtil.contOrExit();
 	}
 	
 	private Cart cartIdInput(){

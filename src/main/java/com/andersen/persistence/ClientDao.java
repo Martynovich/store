@@ -41,10 +41,9 @@ public class ClientDao implements DAO<Client> {
         currentSession.close();
     }
 
-	public void persist(Client entity) {//////////////////////////////////////
+	public void persist(Client entity) {
 		openCurrentSessionwithTransaction().save(entity);
 		closeCurrentSessionwithTransaction();
-		
 	}
 	
 	public Client findById(int id) {
@@ -54,7 +53,7 @@ public class ClientDao implements DAO<Client> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Client> findAll() {//////////////////////////////////
+	public List<Client> findAll() {
 		List<Client> client = (List<Client>)openCurrentSessionwithTransaction().createCriteria(Client.class).list();
 		closeCurrentSessionwithTransaction();
         return client;
@@ -64,8 +63,6 @@ public class ClientDao implements DAO<Client> {
 		openCurrentSessionwithTransaction().update(entity);
 		closeCurrentSessionwithTransaction();
 	}
-
-	
 
 	public void delete(Client entity) {
 		openCurrentSessionwithTransaction().delete(entity);
@@ -83,5 +80,4 @@ public class ClientDao implements DAO<Client> {
             delete(entity);
         }
 	}
-	
 }

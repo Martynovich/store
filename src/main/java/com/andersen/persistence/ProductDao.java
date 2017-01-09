@@ -43,7 +43,6 @@ public class ProductDao implements DAO<Product> {
 	public void persist(Product entity) {
 		openCurrentSessionwithTransaction().save(entity);
 		closeCurrentSessionwithTransaction();
-		
 	}
 	
 	public Product findById(int id) {

@@ -17,6 +17,4 @@ public interface DAO<T> {
 	public void delete(T entity);
 
 	public void deleteAll();
-
-
 }

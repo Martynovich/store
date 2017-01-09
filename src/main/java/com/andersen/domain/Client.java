@@ -1,18 +1,18 @@
 package com.andersen.domain;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Client  implements Serializable {
@@ -28,8 +28,9 @@ public class Client  implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String login;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="client", cascade = CascadeType.ALL)
-	private List<Cart> carts;
+	@OneToMany(mappedBy="client", cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private Set<Cart> carts;
 	
 	public Client(){
 	}
@@ -54,11 +55,11 @@ public class Client  implements Serializable {
 		this.login = name;
 	}
 
-	public List<Cart> getCarts() {
+	public Set<Cart> getCarts() {
 		return carts;
 	}
 
-	public void setCarts(List<Cart> carts) {
+	public void setCarts(Set<Cart> carts) {
 		this.carts = carts;
 	}
 	

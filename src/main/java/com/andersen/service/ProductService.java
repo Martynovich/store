@@ -5,13 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import com.andersen.StoreApp;
-import com.andersen.domain.Client;
 import com.andersen.domain.Product;
-import com.andersen.persistence.ClientDao;
 import com.andersen.persistence.ProductDao;
 
-import javassist.bytecode.ExceptionsAttribute;
 
 public class ProductService implements CrudServise {
 	
@@ -96,7 +92,6 @@ public class ProductService implements CrudServise {
 		}
 		System.out.println("Product updated");
 		StoreUtil.contOrExit();
-		
 	}
 
 	public void deleteById() {
@@ -112,16 +107,17 @@ public class ProductService implements CrudServise {
 	}
 
 	public void deleteAll() {
-		try{
 			List<Product> productList = productDao.findAll();
 			for (Product product : productList) {
-	    		productDao.delete(product);
-	    	}
-		} catch(Exception e){
-			System.out.println("Some products can not be removed. There are orders with these products.");
-			StoreUtil.contOrExit();
-		}
-		System.out.println("All product are deleted.");
+				try{
+					productDao.delete(product);
+				}catch(Exception e){
+					System.out.println("Product id - " + product.getId() +" can not be removed. There are orders with these products.");
+					//StoreUtil.contOrExit();	
+					continue;
+				}
+			}
+		System.out.println("Products are deleted.");
 		StoreUtil.contOrExit();
 	}
 	

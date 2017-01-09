@@ -101,5 +101,4 @@ public class StoreApp {
 		}
 		return Integer.parseInt(userInput);
 	}
-
 }
