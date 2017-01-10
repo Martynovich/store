@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.andersen.domain.Cart;
 import com.andersen.domain.Client;
 import com.andersen.domain.Product;
 import com.andersen.persistence.CartDao;
 
 public class CartService implements CrudServise {
+	
+	private static final Logger logger = Logger.getLogger(CartService.class);
 	
 	private CartDao cartDao;
 	private BufferedReader reader;
@@ -27,6 +31,7 @@ public class CartService implements CrudServise {
 	}
 
 	public void create() {
+		logger.info("Start creating cart.");
 		Client client = clientService.clientIdInput();
 		List<Product> products = new ArrayList<Product>();
 		Cart cart = new Cart();
@@ -45,7 +50,7 @@ public class CartService implements CrudServise {
 				System.out.println("Product added.");
 			}
 		} catch(Exception e){
-			e.printStackTrace();
+			logger.error(e);
 		}
 		cart.setProducts(products);
 		cartDao.persist(cart);
@@ -54,6 +59,7 @@ public class CartService implements CrudServise {
 	}
 
 	public void findById() {
+		logger.info("Start finding by id cart.");
 		Cart cart = cartIdInput();
 		System.out.println("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
 				" order date - " + cart.getDateOfCreation());
@@ -67,6 +73,7 @@ public class CartService implements CrudServise {
 	}
 
 	public void findAll() {
+		logger.info("Start finding all carts.");
 		List<Cart> carts = cartDao.findAll();
 		if(carts == null){
 			System.out.println("No carts.");
@@ -89,6 +96,7 @@ public class CartService implements CrudServise {
 	}
 
 	public void update() {
+		logger.info("Start updating cart.");
 		Cart cart = cartIdInput();
 		Client newClient;
 		try{
@@ -131,13 +139,14 @@ public class CartService implements CrudServise {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e);
 		}
 		cartDao.update(cart);
 		System.out.println("Cart updated.");
 	}
 
 	public void deleteById() {
+		logger.info("Start deleting by id cart.");
 		Cart cart = cartIdInput();
 		cartDao.delete(cart);
 		System.out.println("Cart deleted.");
@@ -145,15 +154,17 @@ public class CartService implements CrudServise {
 	}
 
 	public void deleteAll() {
-		try {
+		logger.info("Start deleting all carts.");
+		
 			List<Cart> cartList = cartDao.findAll();
         	for (Cart cart : cartList) {
-        		cartDao.delete(cart);
+        		try {
+        			cartDao.delete(cart);
+        		}catch(Exception e){
+        			logger.error(e);
+        		}	
         	}
-		}catch(Exception e){
-			System.out.println("");
-		}
-		System.out.println("All carts are deleted.");
+		System.out.println("Carts are deleted.");
 		StoreUtil.contOrExit();
 	}
 	
@@ -172,10 +183,11 @@ public class CartService implements CrudServise {
 					continue;
 				}
 			} catch (NumberFormatException e) {
+				logger.error("Incorect input. Need to enter number.");
 				System.out.println("Incorrect input. Please enter number");
 				continue;
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 			break;
 		}
@@ -221,7 +233,7 @@ public class CartService implements CrudServise {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e);
 		}
 		cart.setProducts(products);
 		return cart;
@@ -249,7 +261,7 @@ public class CartService implements CrudServise {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return products;
 	}

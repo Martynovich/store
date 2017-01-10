@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.log4j.Logger;
+
 import com.andersen.service.ClientService;
 import com.andersen.service.CrudServise;
 import com.andersen.service.CartService;
 import com.andersen.service.ProductService;
 
 public class StoreApp {
+	
+	private final static Logger logger = Logger.getLogger(StoreApp.class);
 	
 	private static CrudServise tableServise;
 	private static String userInput;
@@ -35,6 +39,7 @@ public class StoreApp {
 	}
 	
 	private static void tableSelecting(){
+		logger.info("Start application");;
 		System.out.println("Please select the table.");
 		System.out.println("Enter the table number for select.");
 		System.out.println("1 - Client");
@@ -43,7 +48,7 @@ public class StoreApp {
 		try {
 			rawNumber = inputHandler(new String[]{"1", "2", "3"});
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Something wrong!");
 		}
 		switch(rawNumber){
 			case 1: tableServise = new ClientService();
@@ -70,7 +75,7 @@ public class StoreApp {
 		try {
 			rawNumber = inputHandler(new String[]{"1", "2", "3", "4", "5", "6"});
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Something wrong!");
 		}
 		switch(rawNumber){
 		case 1: tableServise.create();

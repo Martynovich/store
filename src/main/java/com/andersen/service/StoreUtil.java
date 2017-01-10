@@ -4,9 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Logger;
+
 import com.andersen.StoreApp;
 
 public class StoreUtil {
+	
+	private static Logger logger = Logger.getLogger(StoreUtil.class);
 	
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static String userInput;
@@ -16,7 +20,7 @@ public class StoreUtil {
 		try {
 			userInput = reader.readLine();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		while(!userInput.equals(StoreApp.EXIT) && !userInput.equals(StoreApp.CONTINUE)){
 			System.out.printf("Incorrect input. For continue enter- cont");
@@ -24,7 +28,7 @@ public class StoreUtil {
 			try {
 				userInput = reader.readLine();
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 		isContinue(userInput);

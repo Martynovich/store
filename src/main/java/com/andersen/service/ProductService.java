@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.andersen.domain.Product;
 import com.andersen.persistence.ProductDao;
 
 
 public class ProductService implements CrudServise {
+	
+	private final static Logger logger = Logger.getLogger(ProductService.class);
 	
 	private ProductDao productDao;
 	private BufferedReader reader;
@@ -21,6 +25,7 @@ public class ProductService implements CrudServise {
 	}
 
 	public void create() {
+		logger.info("Start creating object.");
 		System.out.println("Enter product's name.");
 		System.out.println("For exit enter - exit.");
 		Product product;
@@ -36,9 +41,11 @@ public class ProductService implements CrudServise {
 			product = new Product(productName, productPrice);
 			productDao.persist(product);
 		}catch(NumberFormatException e){
+			logger.error("Incorect input. Need to enter number.");
 			System.out.println("Incorrect product's price. Please enter number. Try again");
 			create();
 		}catch(Exception e){
+			logger.error(e);
 			System.out.println("This product's name is already exist. Try again");
 			create();
 		}
@@ -47,6 +54,7 @@ public class ProductService implements CrudServise {
 	}
 
 	public void findById() {
+		logger.info("Start finding by id product.");
 		Product product = productIdInput();
 		System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
 				", product price - " + product.getProdutPrice());
@@ -54,6 +62,7 @@ public class ProductService implements CrudServise {
 	}
 
 	public void findAll() {
+		logger.info("Start finding all products.");
 		List<Product> products = productDao.findAll();
 		if(products == null){
 			System.out.println("No products.");
@@ -66,6 +75,7 @@ public class ProductService implements CrudServise {
 	}
 
 	public void update() {
+		logger.info("Start updating product.");
 		Product product = productIdInput();
 		String newName;
 		int newPrice;
@@ -82,9 +92,11 @@ public class ProductService implements CrudServise {
 				product.setProdutPrice(newPrice);
 				productDao.update(product);
 			} catch(NumberFormatException e) {
+				logger.error(e);
 				System.out.println("Incorrect product's price. Please enter number. Try again");
 				continue;
 			} catch(Exception e){
+				logger.error(e);
 				System.out.println("This product name is already exist. Try again");
 				continue;
 			}
@@ -95,6 +107,7 @@ public class ProductService implements CrudServise {
 	}
 
 	public void deleteById() {
+		logger.info("Start deleting by id product.");
 		Product product = productIdInput();
 		try{
 			productDao.delete(product);
@@ -107,11 +120,13 @@ public class ProductService implements CrudServise {
 	}
 
 	public void deleteAll() {
+		logger.info("Start deleting all products.");
 			List<Product> productList = productDao.findAll();
 			for (Product product : productList) {
 				try{
 					productDao.delete(product);
 				}catch(Exception e){
+					logger.error("Can't remove product.");
 					System.out.println("Product id - " + product.getId() +" can not be removed. There are orders with these products.");
 					//StoreUtil.contOrExit();	
 					continue;
@@ -136,10 +151,11 @@ public class ProductService implements CrudServise {
 					continue;
 				}
 			} catch (NumberFormatException e) {
+				logger.error(e);
 				System.out.println("Incorrect input. Please enter number");
 				continue;
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 			break;
 		}
