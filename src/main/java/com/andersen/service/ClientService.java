@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.andersen.StoreApp;
+import com.andersen.App;
 import com.andersen.domain.Client;
 import com.andersen.persistence.ClientDao;
 
@@ -26,25 +26,25 @@ public class ClientService implements CrudServise {
 
 	public void create() {
 		logger.info("Start creating client.");
-		System.out.println("Enter clientname.");
-		System.out.println("For exit enter - exit.");
+		logger.info("Enter clientname.");
+		logger.info("For exit enter - exit.");
 		try {
 			userInput = reader.readLine();
 			StoreUtil.isExit(userInput);
 			clientDao.persist(new Client(userInput)); 
 		} catch (Exception e) {
 			logger.error("Login is already exist.");
-				System.out.println("This login is already exist. Try again");
+			logger.info("This login is already exist. Try again");
 				this.create();
 		}
-		System.out.println("Client is added.");
+		logger.info("Client is added.");
 		StoreUtil.contOrExit();
 	}
 
 	public void findById() {
 		logger.info("Start finding by id client.");
 		Client client = clientIdInput();
-		System.out.println("Client id - " + client.getId() + " client login - " + client.getLogin());
+		logger.info("Client id - " + client.getId() + " client login - " + client.getLogin());
 		StoreUtil.contOrExit();
 	}
 
@@ -64,8 +64,8 @@ public class ClientService implements CrudServise {
 		logger.info("Start updating client.");
 		Client client = clientIdInput();
 		while(true){
-			System.out.println("Enter new login");
-			System.out.println("For exit enter - exit.");
+			logger.info("Enter new login");
+			logger.info("For exit enter - exit.");
 			try{
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
@@ -73,12 +73,12 @@ public class ClientService implements CrudServise {
 				clientDao.update(client);
 			} catch(Exception e) {
 				logger.error("Login is already exist.");
-				System.out.println("This login is already exist. Try again");
+				logger.info("This login is already exist. Try again");
 				continue;
 			}
 			break;
 		}
-		System.out.println("Client updated");
+		logger.info("Client updated");
 		StoreUtil.contOrExit();
 	}
 
@@ -86,7 +86,7 @@ public class ClientService implements CrudServise {
 		logger.info("Start deleting by id client.");
 		Client client = clientIdInput();
 		clientDao.delete(client);
-		System.out.println("Client deleted.");
+		logger.info("Client deleted.");
 		StoreUtil.contOrExit();
 	}
 
@@ -107,19 +107,19 @@ public class ClientService implements CrudServise {
 		Client client = null;
 		int id;
 		while(true){
-			System.out.println("Enter client id.\nFor exit enter - exit.");
+			logger.info("Enter client id.\nFor exit enter - exit.");
 			try {
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				id = Integer.parseInt(userInput);
 				client = clientDao.findById(id);
 				if(client == null){
-					System.out.println("Client with this id does not exist");
+					logger.info("Client with this id does not exist");
 					continue;
 				}
 			} catch (NumberFormatException e) {
 				logger.error("Incorect input. Need to enter number.");
-				System.out.println("Incorrect input. Please enter number");
+				logger.info("Incorrect input. Please enter number");
 				continue;
 			} catch (IOException e) {
 				logger.error(e);

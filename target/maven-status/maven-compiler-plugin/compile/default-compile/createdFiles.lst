@@ -1,11 +1,13 @@
 com\andersen\persistence\DAO.class
+com\andersen\service\StoreUtil.class
 com\andersen\service\ProductService.class
-com\andersen\persistence\OrderDao.class
 com\andersen\domain\Client.class
-com\andersen\domain\Order.class
-com\andersen\service\OrderService.class
+com\andersen\persistence\CartDao.class
+com\andersen\service\CrudServise.class
+com\andersen\domain\Cart.class
 com\andersen\persistence\ClientDao.class
 com\andersen\service\ClientService.class
-com\andersen\service\Store.class
+com\andersen\StoreApp.class
+com\andersen\service\CartService.class
 com\andersen\persistence\ProductDao.class
 com\andersen\domain\Product.class

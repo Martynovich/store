@@ -26,15 +26,15 @@ public class ProductService implements CrudServise {
 
 	public void create() {
 		logger.info("Start creating object.");
-		System.out.println("Enter product's name.");
-		System.out.println("For exit enter - exit.");
+		logger.info("Enter product's name.");
+		logger.info("For exit enter - exit.");
 		Product product;
 		String productName = new String();
 		int productPrice;
 		try{
 			productName = reader.readLine();
 			StoreUtil.isExit(productName);
-			System.out.println("Enter product's price.");
+			logger.info("Enter product's price.");
 			userInput = reader.readLine();
 			StoreUtil.isExit(userInput);
 			productPrice = Integer.parseInt(userInput);
@@ -42,21 +42,21 @@ public class ProductService implements CrudServise {
 			productDao.persist(product);
 		}catch(NumberFormatException e){
 			logger.error("Incorect input. Need to enter number.");
-			System.out.println("Incorrect product's price. Please enter number. Try again");
+			logger.info("Incorrect product's price. Please enter number. Try again");
 			create();
 		}catch(Exception e){
 			logger.error(e);
-			System.out.println("This product's name is already exist. Try again");
+			logger.info("This product's name is already exist. Try again");
 			create();
 		}
-		System.out.println("Product is added.");
+		logger.info("Product is added.");
 		StoreUtil.contOrExit();
 	}
 
 	public void findById() {
 		logger.info("Start finding by id product.");
 		Product product = productIdInput();
-		System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
+		logger.info("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
 				", product price - " + product.getProdutPrice());
 		StoreUtil.contOrExit();
 	}
@@ -65,10 +65,10 @@ public class ProductService implements CrudServise {
 		logger.info("Start finding all products.");
 		List<Product> products = productDao.findAll();
 		if(products == null){
-			System.out.println("No products.");
+			logger.info("No products.");
 		}
 		for(Product product : products){
-			System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
+			logger.info("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
 					", product price - " + product.getProdutPrice());
 		}
 		StoreUtil.contOrExit();
@@ -80,29 +80,29 @@ public class ProductService implements CrudServise {
 		String newName;
 		int newPrice;
 		while(true){
-			System.out.println("Enter new product's name");
-			System.out.println("For exit enter - exit.");
+			logger.info("Enter new product's name");
+			logger.info("For exit enter - exit.");
 			try{
 				newName = reader.readLine();
 				StoreUtil.isExit(newName);
 				product.setProductName(newName);
-				System.out.println("Enter new price.");
+				logger.info("Enter new price.");
 				userInput = reader.readLine();
 				newPrice = Integer.parseInt(userInput);
 				product.setProdutPrice(newPrice);
 				productDao.update(product);
 			} catch(NumberFormatException e) {
 				logger.error(e);
-				System.out.println("Incorrect product's price. Please enter number. Try again");
+				logger.info("Incorrect product's price. Please enter number. Try again");
 				continue;
 			} catch(Exception e){
 				logger.error(e);
-				System.out.println("This product name is already exist. Try again");
+				logger.info("This product name is already exist. Try again");
 				continue;
 			}
 			break;
 		}
-		System.out.println("Product updated");
+		logger.info("Product updated");
 		StoreUtil.contOrExit();
 	}
 
@@ -112,10 +112,10 @@ public class ProductService implements CrudServise {
 		try{
 			productDao.delete(product);
 		} catch(Exception e){
-			System.out.println("This product can not be removed. There are orders with these products.");
+			logger.info("This product can not be removed. There are orders with these products.");
 			StoreUtil.contOrExit();
 		}
-		System.out.println("Product deleted.");
+		logger.info("Product deleted.");
 		StoreUtil.contOrExit();
 	}
 
@@ -128,11 +128,10 @@ public class ProductService implements CrudServise {
 				}catch(Exception e){
 					logger.error("Can't remove product.");
 					System.out.println("Product id - " + product.getId() +" can not be removed. There are orders with these products.");
-					//StoreUtil.contOrExit();	
 					continue;
 				}
 			}
-		System.out.println("Products are deleted.");
+			logger.info("Products are deleted.");
 		StoreUtil.contOrExit();
 	}
 	
@@ -140,19 +139,19 @@ public class ProductService implements CrudServise {
 		Product product = null;
 		int id;
 		while(true){
-			System.out.println("Enter product id.\nFor exit enter - exit.");
+			logger.info("Enter product id.\nFor exit enter - exit.");
 			try {
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				id = Integer.parseInt(userInput);
 				product = productDao.findById(id);
 				if(product == null){
-					System.out.println("Product with this id does not exist");
+					logger.info("Product with this id does not exist");
 					continue;
 				}
 			} catch (NumberFormatException e) {
 				logger.error(e);
-				System.out.println("Incorrect input. Please enter number");
+				logger.info("Incorrect input. Please enter number");
 				continue;
 			} catch (IOException e) {
 				logger.error(e);

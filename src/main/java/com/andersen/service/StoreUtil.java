@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 import org.apache.log4j.Logger;
 
-import com.andersen.StoreApp;
+import com.andersen.App;
 
 public class StoreUtil {
 	
@@ -16,15 +16,15 @@ public class StoreUtil {
 	private static String userInput;
 	
 	static void contOrExit(){
-		System.out.println("For continue enter - cont, for exit enter - exit.");
+		logger.info("For continue enter - cont, for exit enter - exit.");
 		try {
 			userInput = reader.readLine();
 		} catch (IOException e) {
 			logger.error(e);
 		}
-		while(!userInput.equals(StoreApp.EXIT) && !userInput.equals(StoreApp.CONTINUE)){
-			System.out.printf("Incorrect input. For continue enter- cont");
-			System.out.println("For exit enter - exit.");
+		while(!userInput.equals(App.EXIT) && !userInput.equals(App.CONTINUE)){
+			logger.info("Incorrect input. For continue enter - cont");
+			logger.info("For exit enter - exit.");
 			try {
 				userInput = reader.readLine();
 			} catch (IOException e) {
@@ -36,14 +36,14 @@ public class StoreUtil {
 	}
 	
 	static void isExit(String userInput){
-		if(userInput.equals(StoreApp.EXIT)){
+		if(userInput.equals(App.EXIT)){
 			System.exit(0);
 		}
 	}
 	
 	static void isContinue(String userInput){
-		if(userInput.equals(StoreApp.CONTINUE)){
-			StoreApp.startApp();
+		if(userInput.equals(App.CONTINUE)){
+			App.startApp();
 		}
 	}
 }

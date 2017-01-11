@@ -38,35 +38,35 @@ public class CartService implements CrudServise {
 		cart.setClient(client);
 		try {
 			while (true) {
-				System.out.println("Add product? Enter yes/no");
-				System.out.println("For exit enter - exit.");
+				logger.info("Add product? Enter yes/no");
+				logger.info("For exit enter - exit.");
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if (userInput.equals("no")) break;
 				if (!userInput.equals("yes") && !userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
+					logger.info("Enter correct command: yes/no.");
 				}
 				products.add(productService.productIdInput());
-				System.out.println("Product added.");
+				logger.info("Product added.");
 			}
 		} catch(Exception e){
 			logger.error(e);
 		}
 		cart.setProducts(products);
 		cartDao.persist(cart);
-		System.out.println("Cart is added");
+		logger.info("Cart is added");
 		StoreUtil.contOrExit();
 	}
 
 	public void findById() {
 		logger.info("Start finding by id cart.");
 		Cart cart = cartIdInput();
-		System.out.println("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
+		logger.info("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
 				" order date - " + cart.getDateOfCreation());
 		List<Product> products = cart.getProducts();
-		System.out.println("Products in cart.");
+		logger.info("Products in cart.");
 		for(Product product : products){
-			System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
+			logger.info("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
 					", product price - " + product.getProdutPrice());
 		}
 		StoreUtil.contOrExit();
@@ -76,21 +76,21 @@ public class CartService implements CrudServise {
 		logger.info("Start finding all carts.");
 		List<Cart> carts = cartDao.findAll();
 		if(carts == null){
-			System.out.println("No carts.");
+			logger.info("No carts.");
 		}
 		for(Cart cart : carts){
-			System.out.println("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
+			logger.info("Cart id - " + cart.geId() +" client id - " + cart.getClient().getId() + 
 					" order date - " + cart.getDateOfCreation());
 			List<Product> products = cart.getProducts();
-			System.out.println("Products in cart.");
+			logger.info("Products in cart.");
 			if(products.isEmpty()){
-				System.out.println("Cart is empty.");
+				logger.info("Cart is empty.");
 			}
 			for(Product product : products){
-				System.out.println("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
+				logger.info("Product id - " + product.getId() + ", product login - " + product.getProductName() + 
 						", product price - " + product.getProdutPrice());
 			}
-			System.out.println("\n");
+			logger.info("\n");
 		}
 		StoreUtil.contOrExit();
 	}
@@ -101,14 +101,14 @@ public class CartService implements CrudServise {
 		Client newClient;
 		try{
 			while(true){
-				System.out.println("Change client? yes/no.");
-				System.out.println("For exit enter - exit");
+				logger.info("Change client? yes/no.");
+				logger.info("For exit enter - exit");
 				
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if(!userInput.equals("yes") && !userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
-					System.out.println("For exit enter - exit");
+					logger.info("Enter correct command: yes/no.");
+					logger.info("For exit enter - exit");
 					continue;
 				}
 				if(userInput.equals("yes")){
@@ -121,13 +121,13 @@ public class CartService implements CrudServise {
 				}
 			}
 			while(true){
-				System.out.println("Change products? yes/no.");
-				System.out.println("For exit enter - exit");
+				logger.info("Change products? yes/no.");
+				logger.info("For exit enter - exit");
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if(!userInput.equals("yes") && !userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
-					System.out.println("For exit enter - exit");
+					logger.info("Enter correct command: yes/no.");
+					logger.info("For exit enter - exit");
 					continue;
 				}
 				if(userInput.equals("yes")){
@@ -142,14 +142,14 @@ public class CartService implements CrudServise {
 			logger.error(e);
 		}
 		cartDao.update(cart);
-		System.out.println("Cart updated.");
+		logger.info("Cart updated.");
 	}
 
 	public void deleteById() {
 		logger.info("Start deleting by id cart.");
 		Cart cart = cartIdInput();
 		cartDao.delete(cart);
-		System.out.println("Cart deleted.");
+		logger.info("Cart deleted.");
 		StoreUtil.contOrExit();
 	}
 
@@ -164,7 +164,7 @@ public class CartService implements CrudServise {
         			logger.error(e);
         		}	
         	}
-		System.out.println("Carts are deleted.");
+        	logger.info("Carts are deleted.");
 		StoreUtil.contOrExit();
 	}
 	
@@ -172,19 +172,19 @@ public class CartService implements CrudServise {
 		Cart cart = null;
 		int id;
 		while(true){
-			System.out.println("Enter cart id.\nFor exit enter - exit.");
+			logger.info("Enter cart id.\nFor exit enter - exit.");
 			try {
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				id = Integer.parseInt(userInput);
 				cart = cartDao.findById(id);
 				if(cart == null){
-					System.out.println("Cart with this id does not exist");
+					logger.info("Cart with this id does not exist");
 					continue;
 				}
 			} catch (NumberFormatException e) {
 				logger.error("Incorect input. Need to enter number.");
-				System.out.println("Incorrect input. Please enter number");
+				logger.info("Incorrect input. Please enter number");
 				continue;
 			} catch (IOException e) {
 				logger.error(e);
@@ -197,17 +197,17 @@ public class CartService implements CrudServise {
 		List<Product> products = cart.getProducts();
 		try{
 			while(true){
-				System.out.println("Add product? yes/no.");
+				logger.info("Add product? yes/no.");
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if(!userInput.equals("yes") && !userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
-					System.out.println("For exit enter - exit");
+					logger.info("Enter correct command: yes/no.");
+					logger.info("For exit enter - exit");
 					continue;
 				}
 				if(userInput.equals("yes")){
 					products.add(productService.productIdInput());
-					System.out.println("Product added.");
+					logger.info("Product added.");
 					continue;
 				}
 				if(userInput.equals("no")){
@@ -215,17 +215,17 @@ public class CartService implements CrudServise {
 				}
 			}
 			while(true){
-				System.out.println("Remove product? yes/no.");
+				logger.info("Remove product? yes/no.");
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if(!userInput.equals("yes") && !userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
-					System.out.println("For exit enter - exit");
+					logger.info("Enter correct command: yes/no.");
+					logger.info("For exit enter - exit");
 					continue;
 				}
 				if(userInput.equals("yes")){
 					products = removeProduct(products);
-					System.out.println("Products removed.");
+					logger.info("Products removed.");
 					continue;
 				}
 				if(userInput.equals("no")){
@@ -242,11 +242,11 @@ public class CartService implements CrudServise {
 	private List<Product> removeProduct(List<Product> products){
 		try{
 			for(int i = 0 ; i < products.size() ; i++){
-				System.out.println("Are you want to delete?");
-				System.out.println("Product id - " + products.get(i).getId() + ", product login - " + products.get(i).getProductName() + 
+				logger.info("Are you want to delete?");
+				logger.info("Product id - " + products.get(i).getId() + ", product login - " + products.get(i).getProductName() + 
 						", product price - " + products.get(i).getProdutPrice());
-				System.out.println("yes/no");
-				System.out.println("For exit enter - exit");
+				logger.info("yes/no");
+				logger.info("For exit enter - exit");
 				userInput = reader.readLine();
 				StoreUtil.isExit(userInput);
 				if(userInput.equals("yes")){
@@ -256,8 +256,8 @@ public class CartService implements CrudServise {
 					continue;
 				}
 				if(!userInput.equals("yes") && userInput.equals("no")){
-					System.out.println("Enter correct command: yes/no.");
-					System.out.println("For exit enter - exit");
+					logger.info("Enter correct command: yes/no.");
+					logger.info("For exit enter - exit");
 				}
 			}
 		}catch(Exception e){
